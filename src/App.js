@@ -1,10 +1,10 @@
 import './App.css';
-import Button from './components/Button'
+import FormLogin from './components/FormLogin';
 
 export default function App() {
   return (
     <div className="App">
-      <Button />
+      <FormLogin />
     </div>
   );
 }
