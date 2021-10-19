@@ -1,10 +1,11 @@
 import './App.css';
-import FormLogin from './components/FormLogin';
+
+import Router from './routes';
 
 export default function App() {
   return (
     <div className="App">
-      <FormLogin />
+      <Router />
     </div>
   );
 }
