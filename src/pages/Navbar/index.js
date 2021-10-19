@@ -7,6 +7,7 @@ export default function Navbar() {
             <ul>
                 <li>
                     <Link to="/"> Home </Link>
+                    <Link to="/perfil"> Perfil </Link>
                     <Link to="/cotitulares"> Cotitulares </Link>
                 </li>
             </ul>

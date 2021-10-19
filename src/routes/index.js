@@ -9,6 +9,7 @@ import CoHolders from '../pages/CoHolders';
 import Register from '../pages/CoHolders/Register';
 import PageNotFound from '../pages/PageNotFound';
 
+// @TODO: if logged in, rediret to Home, else, redirect to Login
 const Routes = [
     { path: "/", page: <Home /> },
     { path: "/home", page: <Home /> },
@@ -22,7 +23,7 @@ export default function Router() {
     return (
         <BrowserRouter>
             <Navbar />
-
+            
             <Switch>
                 {Routes.map(({ path, page }) => {
                     return (
