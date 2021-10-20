@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-import Navbar from '../pages/Navbar';
 import Profile from '../pages/Profile';
 import Login from '../pages/Login';
 import Home from '../pages/Home';
@@ -22,12 +21,10 @@ const Routes = [
 export default function Router() {
     return (
         <BrowserRouter>
-            <Navbar />
-            
             <Switch>
                 {Routes.map(({ path, page }) => {
                     return (
-                        <Route exact path={path}>
+                        <Route exact path={path} key={path}>
                             {page}
                         </Route>
                     );
