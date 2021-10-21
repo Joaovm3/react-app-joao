@@ -1,12 +1,13 @@
 import React from "react";
 import { TextField } from "@material-ui/core";
 
-export default function Input({ id = 'input', label = 'Default' }) {
+export default function Input({ type = 'text', label = 'Default', ...rest }) {
   return (
-    <TextField 
-      id={id} 
+    <TextField
+      {...rest}
+      type={type}
       label={label} 
-      variant="outlined"
+      variant="standard"
     />
   );
 }
