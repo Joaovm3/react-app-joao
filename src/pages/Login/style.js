@@ -32,12 +32,13 @@ export const ContainerStyle = styled(Container)`
 
 export const ButtonStyle = styled(Button)`
     &.MuiButton-root {
-        background-color: var(--color-primary);
-        border-radius: 0;
+      background-color: var(--color-primary);
+      border-radius: 5px;
+      text-align: center;
     }
 `;
 
 export const LoginStyle = styled.div`
-    padding: 10px;
-    font-weight: bold;
+  padding: 10px;
+  font-weight: bold;
 `;
