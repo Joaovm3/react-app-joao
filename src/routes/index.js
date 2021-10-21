@@ -6,6 +6,7 @@ import Login from '../pages/Login';
 import Home from '../pages/Home';
 import CoHolders from '../pages/CoHolders';
 import Register from '../pages/CoHolders/Register';
+import ForgotPassword from '../pages/ForgotPassword';
 import PageNotFound from '../pages/PageNotFound';
 
 // @TODO: if logged in, rediret to Home, else, redirect to Login
@@ -16,6 +17,8 @@ const Routes = [
     { path: "/login", page: <Login /> },
     { path: "/cotitulares", page: <CoHolders /> },
     { path: "/cotitulares/cadastrar", page: <Register /> },
+    { path: "/esqueci-minha-senha", page: <ForgotPassword /> },
+    
 ];
 
 export default function Router() {
