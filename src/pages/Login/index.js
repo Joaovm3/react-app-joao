@@ -1,12 +1,7 @@
 import React, { useState } from "react";
 import { Formik, useFormik, Form } from "formik";
 
-import {
-  BodyStyle,
-  ContainerStyle,
-  ButtonStyle,
-  LoginStyle,
-} from "./style";
+import { BodyStyle, ContainerStyle, ButtonStyle, LoginStyle } from "./style";
 
 import { Person, Visibility, VisibilityOff, Lock } from "@material-ui/icons";
 
@@ -23,12 +18,26 @@ import * as Yup from "yup";
 import Logo from "../../components/Logo";
 import CheckBoxWithLabel from "../../components/CheckBoxWithLabel";
 import InputWithIcon from "../../components/InputWithIcon";
+import Modal from "../../components/Modal";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+
+  const openShowModal = () => setShowModal(!showModal);
+
+  const handleShowModal = () => {
+    return (
+      <Modal
+        onClose={() => setShowModal(false)}
+        inputLabel="Email ou usuário"
+        title="Esqueci minha senha"
+        content={`Para redefinir sua senha, informe o usuário ou e-mail cadastrado na sua conta e lhe enviaremos um link com as intruções.`}
+        onSubmit={() => alert("Email enviado!")}
+      />
+    );
   };
 
   const pattern = /^[a-z0-9]+$/i;
@@ -56,15 +65,11 @@ export default function Login() {
       /* setTimeout(() => {
         
       }, 3000);
-    */
+      */
       alert(JSON.stringify(values, null, 2));
     },
     validationSchema: validationSchema,
   });
-
-  const handleForgotPassword = () => {
-    console.log("aparecer modal");
-  };
 
   return (
     <BodyStyle>
@@ -122,27 +127,29 @@ export default function Login() {
                 </div>
                 <CheckBoxWithLabel />
 
-                  <ButtonStyle
-                    disabled={!formik.isValid || !formik.dirty}
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                  >
-                    Acessar
-                  </ButtonStyle>
-    
+                <ButtonStyle
+                  disabled={!formik.isValid || !formik.dirty}
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                >
+                  Acessar
+                </ButtonStyle>
               </div>
             </Form>
           )}
         </Formik>
-        
-        <div style={{ marginTop: 30 }}> 
+
+        <div style={{ marginTop: 30 }}>
           <p style={{ opacity: 0.5 }}>
             Esqueceu sua senha?
-            <Button onClick={handleForgotPassword}>Clique Aqui</Button>
+            <Button onClick={openShowModal}>Clique Aqui</Button>
           </p>
         </div>
+
+        {showModal ? handleShowModal() : null}
+        
       </ContainerStyle>
     </BodyStyle>
   );
