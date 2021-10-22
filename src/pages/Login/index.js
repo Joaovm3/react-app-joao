@@ -80,7 +80,7 @@ export default function Login() {
             <Form onSubmit={formik.handleSubmit}>
               <div style={{ margin: "20px" }}>
                 <InputWithIcon
-                  error={formik.errors.user}
+                  error={formik.errors.user ? true : false}
                   name="user"
                   label="Usuário"
                   value={formik.values.user}
@@ -97,7 +97,7 @@ export default function Login() {
                 </div>
 
                 <InputWithIcon
-                  error={formik.errors.password}
+                  error={formik.errors.password ? true : false}
                   name="password"
                   label="Senha"
                   type={showPassword ? "text" : "password"}

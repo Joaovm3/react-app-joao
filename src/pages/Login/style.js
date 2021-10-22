@@ -1,7 +1,7 @@
 import { Container, Button, Typography } from "@material-ui/core";
 import styled from "styled-components";
 
-export const BodyStyle = styled.body`
+export const BodyStyle = styled.div`
   background: linear-gradient(
     135deg,
     rgba(0, 29, 94, 0.969625350140056) 0%,
