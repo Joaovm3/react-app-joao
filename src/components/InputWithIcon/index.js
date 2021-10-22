@@ -1,21 +1,30 @@
 import React from "react";
-import { Box,  FormControl, InputLabel } from '@mui/material';
+import { Box, FormControl, InputLabel } from "@mui/material";
+import { InputStyle } from "./style";
 
-import { InputStyle } from './style';
+export default function InputWithIcon({
+  children,
+  type = "text",
+  label = "Default",
+  ...rest
+}) {
+  return (
+    <Box sx={{ display: "flex", alignItems: "flex-end", margin: "15px 0px" }}>
+      {children}
 
-export default function InputWithIcon({ children , type = "text", label = "Default", ...rest }) {
-    return (
-        <Box sx={{ display: "flex", alignItems: "flex-end", margin: '15px 0px' }}>
-            {children}
-
-            <FormControl>
-                <InputLabel> {label} </InputLabel>
-                <InputStyle 
-                    {...rest} 
-                    type={type} 
-                    variant="standard" 
-                />
-            </FormControl>
-        </Box>
-    );
+      <FormControl
+        sx={{
+          width: 500,
+          maxWidth: "100%",
+        }}
+      >
+        <InputLabel> {label} </InputLabel>
+        <InputStyle
+          {...rest}
+          type={type}
+          variant="standard"
+        />
+      </FormControl>
+    </Box>
+  );
 }

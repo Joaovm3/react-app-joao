@@ -1,4 +1,4 @@
-import { Container, Button } from "@material-ui/core";
+import { Container, Button, Typography } from "@material-ui/core";
 import styled from "styled-components";
 
 export const BodyStyle = styled.body`
@@ -19,14 +19,13 @@ export const BodyStyle = styled.body`
 
 export const ContainerStyle = styled(Container)`
   &.MuiContainer-root {
-    padding: 20px;
+    padding: 20px 20px 0 20px;
     background-color: whitesmoke;
     display: flex;
     flex-direction: column;   
-    min-width: 200px;
+    justify-content: space-around;
     max-width: 550px;
-    width: 250px;
-    height: 90%;
+    width: 450px;
   }
 
   &.MuiContainer-root:hover {
@@ -37,6 +36,8 @@ export const ContainerStyle = styled(Container)`
 
 export const ButtonStyle = styled(Button)`
     &.MuiButton-root {
+      margin-top: 30px;
+      height: 39px;
       background-color: var(--color-primary);
       border-radius: 5px;
       text-align: center;
@@ -44,6 +45,12 @@ export const ButtonStyle = styled(Button)`
 `;
 
 export const LoginStyle = styled.div`
+  color: var(--color-primary);
   padding: 10px;
   font-weight: bold;
+`;
+
+export const TypographyStyle = styled(Typography)`
+  font-size: 15px;
+  opacity: 0.5;
 `;
