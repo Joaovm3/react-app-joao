@@ -1,15 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Formik, useFormik, Form } from "formik";
 
-import { BodyStyle, ContainerStyle, ButtonStyle, LoginStyle } from "./style";
+import {
+  BodyStyle,
+  ContainerStyle,
+  ButtonStyle,
+  LoginStyle,
+} from "./style";
 
 import { Person, Visibility, VisibilityOff, Lock } from "@material-ui/icons";
 
 import {
-  Link,
+  Typography,
+  Button,
   InputAdornment,
   IconButton,
-  FormHelperText 
+  FormHelperText,
 } from "@mui/material";
 
 import * as Yup from "yup";
@@ -20,24 +26,19 @@ import InputWithIcon from "../../components/InputWithIcon";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
-  const [disableButton, setDisableButton] = useState(true);
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleErrorFormik = (error) => {
-    return <FormHelperText style={{ color: "red", fontSize: "10px" }}> {error} </FormHelperText>;
-  };
-
-  const pattern = /^[a-z0-9]+$/i; 
+  const pattern = /^[a-z0-9]+$/i;
   const minSevenNumbers = 700000;
 
   const validationSchema = Yup.object().shape({
     user: Yup.string()
-    .min(2, "O campo deve ter no mínimo 2 caracteres!")
-    .matches(pattern, "Não pode haver caracteres especiais!")
-    .required("Campo obrigatório!"),
+      .min(2, "O campo deve ter no mínimo 2 caracteres!")
+      .matches(pattern, "Não pode haver caracteres especiais!")
+      .required("Campo obrigatório!"),
     password: Yup.number()
       .typeError("A senha deve ser um número!")
       .positive("Deve ser um número positivo")
@@ -52,36 +53,32 @@ export default function Login() {
       password: "",
     },
     onSubmit: (values) => {
-    /* setTimeout(() => {
+      /* setTimeout(() => {
         
       }, 3000);
     */
       alert(JSON.stringify(values, null, 2));
     },
-    validationSchema:validationSchema,
+    validationSchema: validationSchema,
   });
 
-  useEffect(() => {
-    if (formik.isValid) {
-      return setDisableButton(false)
-    }
-    return setDisableButton(true)
-  }, [formik.isValid]);
+  const handleForgotPassword = () => {
+    console.log("aparecer modal");
+  };
 
   return (
     <BodyStyle>
       <ContainerStyle>
         <Logo />
 
-        <LoginStyle> LOGIN </LoginStyle>
+        <Typography variant="h4">
+          <LoginStyle> LOGIN </LoginStyle>
+        </Typography>
 
-        <Formik
-          initialValues={formik.initialValues}
-          validationSchema={validationSchema}
-        >
+        <Formik initialValues={formik.initialValues}>
           {(props) => (
             <Form onSubmit={formik.handleSubmit}>
-              <div style={{ margin: "5px" }}>
+              <div style={{ margin: "20px" }}>
                 <InputWithIcon
                   error={formik.errors.user}
                   name="user"
@@ -89,12 +86,15 @@ export default function Login() {
                   value={formik.values.user}
                   onChange={formik.handleChange}
                   onBlur={formik.handleChange}
-                  fullWidth
                 >
                   <Person />
                 </InputWithIcon>
 
-                {formik.errors.user && handleErrorFormik(formik.errors.user)}
+                <div style={{ width: "100%", height: 20 }}>
+                  <FormHelperText error>
+                    {formik.errors.user && formik.errors.user}
+                  </FormHelperText>
+                </div>
 
                 <InputWithIcon
                   error={formik.errors.password}
@@ -115,25 +115,34 @@ export default function Login() {
                   <Lock />
                 </InputWithIcon>
 
-                {formik.errors.password && handleErrorFormik(formik.errors.password)}
-
+                <div style={{ width: "100%", height: 20 }}>
+                  <FormHelperText error>
+                    {formik.errors.password && formik.errors.password}
+                  </FormHelperText>
+                </div>
                 <CheckBoxWithLabel />
-                  
-                <ButtonStyle
-                  disabled={disableButton}
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                >
-                  Acessar
-                </ButtonStyle>
 
-                <p style={{ fontSize: '10px', opacity: 0.5 }}> Esqueceu sua senha? <Link href="/esqueci-minha-senha"> Clique Aqui </Link> </p>
+                  <ButtonStyle
+                    disabled={!formik.isValid || !formik.dirty}
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                  >
+                    Acessar
+                  </ButtonStyle>
+    
               </div>
             </Form>
           )}
         </Formik>
+        
+        <div style={{ marginTop: 30 }}> 
+          <p style={{ opacity: 0.5 }}>
+            Esqueceu sua senha?
+            <Button onClick={handleForgotPassword}>Clique Aqui</Button>
+          </p>
+        </div>
       </ContainerStyle>
     </BodyStyle>
   );
