@@ -19,6 +19,7 @@ import Logo from "../../components/Logo";
 import CheckBoxWithLabel from "../../components/CheckBoxWithLabel";
 import InputWithIcon from "../../components/InputWithIcon";
 import Modal from "../../components/Modal";
+import Input from "../../components/Input";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -42,14 +43,20 @@ export default function Login() {
     return (
       <Modal
         onClose={() => setShowModal(false)}
-        error={formik.errors.email ? true : false}
-        helperText={formik.errors.email}
         disabled={true}
-        inputLabel="Email ou usuário"
         title="Esqueci minha senha"
         content={`Para redefinir sua senha, informe o usuário ou e-mail cadastrado na sua conta e lhe enviaremos um link com as intruções.`}
         onSubmit={() => alert("Email enviado!")}
-      />
+      >
+        <Input 
+          label="Email ou usuário"
+          error={formik.errors.email ? true : false}
+          helperText={formik.errors.email}
+          type="email"
+          margin="dense"
+          fullWidth
+        />
+      </Modal>
     );
   };
 

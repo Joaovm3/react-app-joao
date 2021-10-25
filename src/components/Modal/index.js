@@ -8,9 +8,8 @@ import {
 } from "@mui/material";
 
 import Button from '../Button';
-import Input from '../Input';
 
-export default function Modal({ onClose = () => {}, onSubmit = () => {}, title, content, inputLabel, buttonName = 'Enviar', error = false, helperText, disabled = false }) {
+export default function Modal({ onClose = () => {}, onSubmit = () => {}, title, content, buttonName = 'Enviar', error = false, helperText, disabled = false, children }) {
 
   return (
     <div>
@@ -22,15 +21,7 @@ export default function Modal({ onClose = () => {}, onSubmit = () => {}, title, 
           <DialogContentText>
             {content}
           </DialogContentText>
-          <Input 
-            error={error}
-            helperText={helperText}
-            autoFocus
-            fullWidth
-            label={inputLabel}
-            type="email"
-            margin="dense"
-          />
+          {children}
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose}> Fechar </Button>
