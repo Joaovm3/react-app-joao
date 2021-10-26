@@ -24,6 +24,8 @@ import Input from "../../components/Input";
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [validEmail, setValidEmail] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
@@ -32,29 +34,37 @@ export default function Login() {
   const validationEmailSchema = Yup.object().shape({
     email: Yup.string()
       .email("Formato de email Inválido!")
-      .required("O campo de email é obrigatório!")
-  }); 
+      .required("O campo de email é obrigatório!"),
+  });
 
   const handleShowModal = () => {
-    validationEmailSchema.isValid({
-      email: 'teste'
-    }).then((valid)=>console.log(valid)).catch((err)=>console.log(err))
-  
+    const validateEmail = (e) => {
+      const email = e.target.value;
+
+      validationEmailSchema
+        .validate({
+          email: email,
+        })
+        .then(() => setValidEmail(true))
+        .catch((err) => setErrorMessage(err.message), setValidEmail(false));
+    };
+
     return (
       <Modal
         onClose={() => setShowModal(false)}
-        disabled={true}
+        disabled={!validEmail}
         title="Esqueci minha senha"
         content={`Para redefinir sua senha, informe o usuário ou e-mail cadastrado na sua conta e lhe enviaremos um link com as intruções.`}
         onSubmit={() => alert("Email enviado!")}
       >
-        <Input 
+        <Input
           label="Email ou usuário"
-          error={formik.errors.email ? true : false}
-          helperText={formik.errors.email}
+          error={!validEmail}
+          helperText={!validEmail ? errorMessage : ""}
           type="email"
           margin="dense"
           fullWidth
+          onChange={(event) => validateEmail(event)}
         />
       </Modal>
     );
@@ -73,13 +83,13 @@ export default function Login() {
       .positive("Deve ser um número positivo")
       .integer("Deve ser um número inteiro")
       .min(minSevenNumbers, "A senha deve ter no mínimo 7 números!")
-      .required("Campo obrigatório!")
+      .required("Campo obrigatório!"),
   });
 
   const formik = useFormik({
     initialValues: {
       user: "",
-      password: ""
+      password: "",
     },
     onSubmit: (values) => {
       /* setTimeout(() => {
