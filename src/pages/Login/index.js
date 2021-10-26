@@ -20,12 +20,14 @@ import CheckBoxWithLabel from "../../components/CheckBoxWithLabel";
 import InputWithIcon from "../../components/InputWithIcon";
 import Modal from "../../components/Modal";
 import Input from "../../components/Input";
+import Snackbar from "../../components/Snackbar";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [validEmail, setValidEmail] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [open, setOpen] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
@@ -49,14 +51,17 @@ export default function Login() {
         .catch((err) => setErrorMessage(err.message), setValidEmail(false));
     };
 
+    const handleSuccessMessage = () => setOpen(!open);
+    
     return (
       <Modal
         onClose={() => setShowModal(false)}
         disabled={!validEmail}
         title="Esqueci minha senha"
         content={`Para redefinir sua senha, informe o usuário ou e-mail cadastrado na sua conta e lhe enviaremos um link com as intruções.`}
-        onSubmit={() => alert("Email enviado!")}
+        onSubmit={handleSuccessMessage}
       >
+
         <Input
           label="Email ou usuário"
           error={!validEmail}
@@ -178,6 +183,7 @@ export default function Login() {
         </div>
 
         {showModal ? handleShowModal() : null}
+        {open && <Snackbar severity="success" onClose={() => setOpen(false)}> Email enviado com sucesso! </Snackbar>}
       </ContainerStyle>
     </BodyStyle>
   );
