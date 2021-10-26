@@ -9,7 +9,7 @@ import {
 
 import Button from '../Button';
 
-export default function Modal({ onClose = () => {}, onSubmit = () => {}, title, content, buttonName = 'Enviar', error = false, helperText, disabled = false, children }) {
+export default function Modal({ onClose = () => {}, onSubmit = () => {}, title, content, buttonName = 'Enviar', disabled = false, children }) {
 
   return (
     <div>
