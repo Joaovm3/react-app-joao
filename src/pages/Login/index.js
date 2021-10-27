@@ -32,9 +32,8 @@ import {
 
 export default function Login() {
   const dispatch = useDispatch();
-  const login = useSelector((state) => state.login);
-  const loading = useSelector((state) => state.loading.ShowLoading);
-
+  const { user, userSaved } = useSelector((state) => state.login);
+ 
   const [showPassword, setShowPassword] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [validEmail, setValidEmail] = useState(false);
@@ -63,7 +62,14 @@ export default function Login() {
         .catch((err) => setErrorMessage(err.message), setValidEmail(false));
     };
 
-    const handleSuccessMessage = () => setOpen(!open);
+    const handleSuccessMessage = () => {
+      dispatch(AwaitForgotPassword());
+      dispatch(ShowLoading());
+      setTimeout(() => {
+        dispatch(HideLoading());
+        return setOpen(!open);
+      }, 3000);
+    };
 
     return (
       <Modal
@@ -104,28 +110,23 @@ export default function Login() {
 
   const formik = useFormik({
     initialValues: {
-      user: "",
-      password: "",
+      user: user.username ?? "",
+      password: user.password ?? "",
     },
     onSubmit: (values) => {
       const { user, password } = values;
 
-      console.log("carregando");
       dispatch(ShowLoading());
       setTimeout(() => {
-        
-      console.log("salvou!");
         dispatch(
           SaveLogin({
             username: user,
             password: password,
           })
         );
-        console.log("Escondeu Loading");
+
         dispatch(HideLoading());
       }, 3000);
-      console.log("saiu do timeOut");
-      
     },
     validationSchema: validationSchema,
   });
@@ -209,8 +210,7 @@ export default function Login() {
         {showModal ? handleShowModal() : null}
         {open && (
           <Snackbar severity="success" onClose={() => setOpen(false)}>
-            {" "}
-            Email enviado com sucesso!{" "}
+            Email enviado com sucesso!
           </Snackbar>
         )}
       </ContainerStyle>

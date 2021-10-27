@@ -1,6 +1,3 @@
-// []APP_SHOW_LOADING deverá exibir o Loading no aplicativo, trocando o valor da variável.
-// []APP_HIDE_LOADING deverá ocultar o Loading no aplicativo, trocando o valor da variável.
-
 import { APP_HIDE_LOADING, APP_SHOW_LOADING } from "../actions/types";
 
 const initialState = {
