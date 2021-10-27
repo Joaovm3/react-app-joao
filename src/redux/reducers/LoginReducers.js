@@ -5,7 +5,10 @@
 import { LOGIN_DO_FORGOT_PASS, LOGIN_DO_LOGIN } from "../actions/types";
 
 const initialState = {
-  user: {},
+  user: {
+    username: "",
+    password: "",
+  },
   userSaved: false,
   showLoading: false,
 };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Formik, useFormik, Form } from "formik";
 
 import { BodyStyle, ContainerStyle, ButtonStyle, LoginStyle } from "./style";
@@ -21,8 +21,20 @@ import InputWithIcon from "../../components/InputWithIcon";
 import Modal from "../../components/Modal";
 import Input from "../../components/Input";
 import Snackbar from "../../components/Snackbar";
+import Loading from "../../components/Loading";
+
+import { useDispatch, useSelector } from "react-redux";
+import { HideLoading, ShowLoading } from "../../redux/actions/AppActions";
+import {
+  AwaitForgotPassword,
+  SaveLogin,
+} from "../../redux/actions/LoginActions";
 
 export default function Login() {
+  const dispatch = useDispatch();
+  const login = useSelector((state) => state.login);
+  const loading = useSelector((state) => state.loading.ShowLoading);
+
   const [showPassword, setShowPassword] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [validEmail, setValidEmail] = useState(false);
@@ -52,7 +64,7 @@ export default function Login() {
     };
 
     const handleSuccessMessage = () => setOpen(!open);
-    
+
     return (
       <Modal
         onClose={() => setShowModal(false)}
@@ -61,7 +73,6 @@ export default function Login() {
         content={`Para redefinir sua senha, informe o usuário ou e-mail cadastrado na sua conta e lhe enviaremos um link com as intruções.`}
         onSubmit={handleSuccessMessage}
       >
-
         <Input
           label="Email ou usuário"
           error={!validEmail}
@@ -97,11 +108,24 @@ export default function Login() {
       password: "",
     },
     onSubmit: (values) => {
-      /* setTimeout(() => {
+      const { user, password } = values;
+
+      console.log("carregando");
+      dispatch(ShowLoading());
+      setTimeout(() => {
         
+      console.log("salvou!");
+        dispatch(
+          SaveLogin({
+            username: user,
+            password: password,
+          })
+        );
+        console.log("Escondeu Loading");
+        dispatch(HideLoading());
       }, 3000);
-      */
-      alert(JSON.stringify(values, null, 2));
+      console.log("saiu do timeOut");
+      
     },
     validationSchema: validationSchema,
   });
@@ -110,7 +134,6 @@ export default function Login() {
     <BodyStyle>
       <ContainerStyle>
         <Logo />
-
         <Typography variant="h4">
           <LoginStyle> LOGIN </LoginStyle>
         </Typography>
@@ -175,15 +198,21 @@ export default function Login() {
             </Form>
           )}
         </Formik>
+
         <div style={{ marginTop: 30 }}>
-          <p style={{ opacity: 0.5 }}>
+          <p style={{ opacity: 0.5, textAlign: "center" }}>
             Esqueceu sua senha?
             <Button onClick={openShowModal}>Clique Aqui</Button>
           </p>
         </div>
 
         {showModal ? handleShowModal() : null}
-        {open && <Snackbar severity="success" onClose={() => setOpen(false)}> Email enviado com sucesso! </Snackbar>}
+        {open && (
+          <Snackbar severity="success" onClose={() => setOpen(false)}>
+            {" "}
+            Email enviado com sucesso!{" "}
+          </Snackbar>
+        )}
       </ContainerStyle>
     </BodyStyle>
   );

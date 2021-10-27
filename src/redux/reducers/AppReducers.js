@@ -8,7 +8,7 @@ const initialState = {
 };
 
 export const LoadingReducer = (state = initialState, action) => {
-  let show = false;
+  let show = state.showLoading;
 
   switch (action.type) {
     case APP_HIDE_LOADING:
