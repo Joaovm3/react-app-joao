@@ -1,6 +1,8 @@
 import { createGlobalStyle, ThemeProvider } from "styled-components";
+import { useStore } from "react-redux";
 import Loading from "../src/components/Loading";
-import { storeWrapper } from "../src/redux/store"; 
+import { storeWrapper } from "../src/redux/store";
+import { PersistGate } from "redux-persist/integration/react";
 
 const GlobalStyle = createGlobalStyle`
   :root {
@@ -22,15 +24,16 @@ const theme = {
 };
 
 function App({ Component, pageProps }) {
+  const store = useStore();
+  
   return (
-    <>
-    
-    <Loading />
+    <PersistGate loading={null} persistor={store.__persistor}>
+      <Loading />
       <GlobalStyle />
-        <ThemeProvider theme={theme}>
-          <Component {...pageProps} />
-        </ThemeProvider>
-    </>
+      <ThemeProvider theme={theme}>
+        <Component {...pageProps} />
+      </ThemeProvider>
+    </PersistGate>     
   );
 }
 
