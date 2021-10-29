@@ -7,7 +7,7 @@ export default function index({ children, severity, onClose }) {
     }
 
     return (
-    <Snackbar open={onClose} autoHideDuration={6000} onClose={handleClose}>
+    <Snackbar open={onClose} autoHideDuration={3000} onClose={handleClose}>
         <Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>
           {children}
         </Alert>

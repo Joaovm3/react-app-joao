@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Formik, useFormik, Form } from "formik";
-
-import { BodyStyle, ContainerStyle, ButtonStyle, LoginStyle } from "./style";
+import * as Yup from "yup";
 
 import { Person, Visibility, VisibilityOff, Lock } from "@material-ui/icons";
 
@@ -13,7 +12,7 @@ import {
   FormHelperText,
 } from "@mui/material";
 
-import * as Yup from "yup";
+import { BodyStyle, ContainerStyle, ButtonStyle, LoginStyle } from "./style";
 
 import Logo from "../../components/Logo";
 import CheckBoxWithLabel from "../../components/CheckBoxWithLabel";
@@ -21,24 +20,29 @@ import InputWithIcon from "../../components/InputWithIcon";
 import Modal from "../../components/Modal";
 import Input from "../../components/Input";
 import Snackbar from "../../components/Snackbar";
-import Loading from "../../components/Loading";
 
 import { useDispatch, useSelector } from "react-redux";
 import { HideLoading, ShowLoading } from "../../redux/actions/AppActions";
 import {
   AwaitForgotPassword,
   SaveLogin,
+  SaveChecked,
 } from "../../redux/actions/LoginActions";
 
 export default function Login() {
   const dispatch = useDispatch();
-  const { user, userSaved } = useSelector((state) => state.login);
- 
+
+  const { user, userSaved, showForgotPass } = useSelector((state) => state.login);
+
   const [showPassword, setShowPassword] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [validEmail, setValidEmail] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [open, setOpen] = useState(false);
+
+  const handleCheckBox = () => {
+    dispatch(SaveChecked(!userSaved));
+  }
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
@@ -64,11 +68,7 @@ export default function Login() {
 
     const handleSuccessMessage = () => {
       dispatch(AwaitForgotPassword());
-      dispatch(ShowLoading());
-      setTimeout(() => {
-        dispatch(HideLoading());
-        return setOpen(!open);
-      }, 3000);
+      return setOpen(!open);
     };
 
     return (
@@ -94,7 +94,7 @@ export default function Login() {
 
   const pattern = /^[a-z0-9]+$/i;
   const minSevenNumbers = 700000;
-
+  
   const validationSchema = Yup.object().shape({
     user: Yup.string()
       .min(2, "O campo deve ter no mínimo 2 caracteres!")
@@ -110,8 +110,8 @@ export default function Login() {
 
   const formik = useFormik({
     initialValues: {
-      user: user.username ?? "",
-      password: user.password ?? "",
+      user: userSaved ? user.username : "",
+      password: userSaved ? user.password : "",
     },
     onSubmit: (values) => {
       const { user, password } = values;
@@ -184,8 +184,9 @@ export default function Login() {
                     {formik.errors.password && formik.errors.password}
                   </FormHelperText>
                 </div>
-                <CheckBoxWithLabel />
 
+                <CheckBoxWithLabel onClick={handleCheckBox} checked={userSaved} />
+                
                 <ButtonStyle
                   disabled={!formik.isValid || !formik.dirty}
                   type="submit"
@@ -199,7 +200,7 @@ export default function Login() {
             </Form>
           )}
         </Formik>
-
+                  
         <div style={{ marginTop: 30 }}>
           <p style={{ opacity: 0.5, textAlign: "center" }}>
             Esqueceu sua senha?
