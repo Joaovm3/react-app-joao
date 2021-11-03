@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Formik, useFormik, Form } from "formik";
 import * as Yup from "yup";
 
@@ -33,17 +33,15 @@ export default function Login() {
   const dispatch = useDispatch();
 
   const { user, userSaved, showForgotPass } = useSelector((state) => state.login);
-
+  
   const [showPassword, setShowPassword] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [validEmail, setValidEmail] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [open, setOpen] = useState(false);
 
-  const handleCheckBox = () => {
-    dispatch(SaveChecked(!userSaved));
-  }
-
+  const handleCheckBox = () => dispatch(SaveChecked(!userSaved));
+  
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const openShowModal = () => setShowModal(!showModal);
@@ -124,7 +122,7 @@ export default function Login() {
             password: password,
           })
         );
-
+        
         dispatch(HideLoading());
       }, 3000);
     },
@@ -186,7 +184,7 @@ export default function Login() {
                 </div>
 
                 <CheckBoxWithLabel onClick={handleCheckBox} checked={userSaved} />
-                
+                  
                 <ButtonStyle
                   disabled={!formik.isValid || !formik.dirty}
                   type="submit"
@@ -201,11 +199,12 @@ export default function Login() {
           )}
         </Formik>
                   
-        <div style={{ marginTop: 30 }}>
-          <p style={{ opacity: 0.5, textAlign: "center" }}>
+        <div style={{ marginTop: 30, marginBottom: 10,  textAlign: "center" }}>
+          <p style={{ opacity: 0.5, display: "inline" }}>
             Esqueceu sua senha?
-            <Button onClick={openShowModal}>Clique Aqui</Button>
           </p>
+          
+          <Button onClick={openShowModal}>Clique Aqui</Button>
         </div>
 
         {showModal ? handleShowModal() : null}

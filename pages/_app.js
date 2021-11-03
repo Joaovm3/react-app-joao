@@ -1,13 +1,21 @@
 import { createGlobalStyle, ThemeProvider } from "styled-components";
+
+import { Router } from "next/router";
+
 import { useStore } from "react-redux";
-import Loading from "../src/components/Loading";
 import { storeWrapper } from "../src/redux/store";
 import { PersistGate } from "redux-persist/integration/react";
+
+import Loading from "../src/components/Loading";
+
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
+import { useEffect } from "react";
 
 const GlobalStyle = createGlobalStyle`
   :root {
     --color-primary: #001D5E;
-    --color-secundary: #FF901E;
+    --color-secondary: #FF901E;
     --color-white: white;
   }
   body {
@@ -23,9 +31,18 @@ const theme = {
   },
 };
 
+
+
 function App({ Component, pageProps }) {
+
   const store = useStore();
-  
+
+  useEffect(() => {
+    Router.events.on('routeChangeStart', NProgress.start());
+    Router.events.on('routeChangeComplete', NProgress.done()); 
+    Router.events.on('routeChangeError', NProgress.done());
+  }, []);
+
   return (
     <PersistGate loading={null} persistor={store.__persistor}>
       <Loading />
@@ -33,7 +50,19 @@ function App({ Component, pageProps }) {
       <ThemeProvider theme={theme}>
         <Component {...pageProps} />
       </ThemeProvider>
-    </PersistGate>     
+      <style global jsx>
+        {`
+          #nprogress {
+            position: relative;
+            z-index: 999999999;
+          }
+          #nprogress .bar {
+            background: var(--color-primary);
+            height: 3px;
+          }
+        `}
+      </style>
+    </PersistGate>
   );
 }
 
