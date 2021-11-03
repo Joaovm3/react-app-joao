@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Formik, useFormik, Form } from "formik";
 import * as Yup from "yup";
 
@@ -32,8 +32,11 @@ import {
 export default function Login() {
   const dispatch = useDispatch();
 
-  const { user, userSaved, showForgotPass } = useSelector((state) => state.login);
-  
+  const { user, userSaved, showForgotPass } = useSelector(
+    (state) => state.login
+  );
+
+  const [disable, setDisable] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [validEmail, setValidEmail] = useState(false);
@@ -41,7 +44,7 @@ export default function Login() {
   const [open, setOpen] = useState(false);
 
   const handleCheckBox = () => dispatch(SaveChecked(!userSaved));
-  
+
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const openShowModal = () => setShowModal(!showModal);
@@ -92,7 +95,7 @@ export default function Login() {
 
   const pattern = /^[a-z0-9]+$/i;
   const minSevenNumbers = 700000;
-  
+
   const validationSchema = Yup.object().shape({
     user: Yup.string()
       .min(2, "O campo deve ter no mínimo 2 caracteres!")
@@ -122,12 +125,20 @@ export default function Login() {
             password: password,
           })
         );
-        
+
         dispatch(HideLoading());
       }, 3000);
     },
     validationSchema: validationSchema,
   });
+
+  useEffect(() => {
+    if (userSaved && formik.isValid) {
+      setDisable(false);
+    } else {
+      setDisable(!formik.isValid || !formik.dirty);
+    }
+  }, [formik.isValid])
 
   return (
     <BodyStyle>
@@ -183,10 +194,13 @@ export default function Login() {
                   </FormHelperText>
                 </div>
 
-                <CheckBoxWithLabel onClick={handleCheckBox} checked={userSaved} />
-                  
+                <CheckBoxWithLabel
+                  onClick={handleCheckBox}
+                  checked={userSaved}
+                />
+
                 <ButtonStyle
-                  disabled={!formik.isValid || !formik.dirty}
+                  disabled={disable}
                   type="submit"
                   variant="contained"
                   color="primary"
@@ -198,16 +212,15 @@ export default function Login() {
             </Form>
           )}
         </Formik>
-                  
-        <div style={{ marginTop: 30, marginBottom: 10,  textAlign: "center" }}>
-          <p style={{ opacity: 0.5, display: "inline" }}>
-            Esqueceu sua senha?
-          </p>
-          
+
+        <div style={{ marginTop: 30, marginBottom: 10, textAlign: "center" }}>
+          <p style={{ opacity: 0.5, display: "inline" }}>Esqueceu sua senha?</p>
+
           <Button onClick={openShowModal}>Clique Aqui</Button>
         </div>
 
         {showModal ? handleShowModal() : null}
+
         {open && (
           <Snackbar severity="success" onClose={() => setOpen(false)}>
             Email enviado com sucesso!
