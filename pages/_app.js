@@ -1,16 +1,14 @@
-import { createGlobalStyle, ThemeProvider } from "styled-components";
-
+import { useEffect } from "react";
 import { Router } from "next/router";
-
 import { useStore } from "react-redux";
 import { storeWrapper } from "../src/redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 
 import Loading from "../src/components/Loading";
+import { createGlobalStyle, ThemeProvider } from "styled-components";
 
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
-import { useEffect } from "react";
 
 const GlobalStyle = createGlobalStyle`
   :root {
@@ -30,8 +28,6 @@ const theme = {
     primary: "#0070f3",
   },
 };
-
-
 
 function App({ Component, pageProps }) {
 

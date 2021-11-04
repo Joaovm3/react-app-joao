@@ -1,7 +1,13 @@
-import Home from '../../src/pages/Home';
+import Home from "../../src/pages/Home";
+import Head from "next/head";
 
 export default function index() {
   return (
-    <Home />
-  )
+    <>
+      <Head>
+        <title> Home </title>
+      </Head>
+      <Home />
+    </>
+  );
 }

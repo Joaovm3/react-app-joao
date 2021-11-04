@@ -1,7 +1,13 @@
-import Register from '../../../src/pages/CoHolders/Register';
+import Register from "../../../src/pages/CoHolders/Register";
+import Head from "next/head";
 
 export default function index() {
   return (
-    <Register />
-  )
+    <>
+      <Head>
+        <title> Cadastrar cotitular </title>
+      </Head>
+      <Register />
+    </>
+  );
 }
