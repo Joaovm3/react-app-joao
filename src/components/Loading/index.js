@@ -11,7 +11,6 @@ export default function Loading() {
         <CircularProgressStyle />
       </BoxStyle>
     );
-  } else {
-    return null;
-  }
+  } 
+  return null;
 }

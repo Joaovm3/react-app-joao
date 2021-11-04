@@ -15,6 +15,7 @@ export const BodyStyle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
 `;
 
 export const ContainerStyle = styled(Container)`
@@ -45,7 +46,6 @@ export const ButtonStyle = styled(Button)`
 `;
 
 export const LoginStyle = styled.div`
-  text-align: center;
   color: var(--color-primary);
   padding: 10px;
   font-weight: bold;

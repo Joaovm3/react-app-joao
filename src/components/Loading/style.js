@@ -6,8 +6,8 @@ export const CircularProgressStyle = styled(CircularProgress)`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 100px;
-  z-index: 99999;
+  z-index: 99999; 
+  top: 10px;
 `;
 
 export const BoxStyle = styled(Box)`
@@ -17,7 +17,5 @@ export const BoxStyle = styled(Box)`
       filter: blur(8px) !important;
     } 
   */
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  text-align: center;
 `;

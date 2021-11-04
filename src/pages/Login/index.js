@@ -130,9 +130,11 @@ export default function Login() {
             password: password,
           })
         );
-
+        
         dispatch(HideLoading());
+        location.href = "/home";
       }, 3000);
+      
     },
     validationSchema: validationSchema,
   });
@@ -156,7 +158,7 @@ export default function Login() {
           {(props) => (
             <Form onSubmit={formik.handleSubmit}>
               <div style={{ margin: "20px" }}>
-                
+
                 <InputWithIcon
                   error={formik.errors.user ? true : false}
                   name="user"
@@ -218,7 +220,7 @@ export default function Login() {
           )}
         </Formik>
 
-        <div style={{ marginTop: 30, marginBottom: 10, textAlign: "center" }}>
+        <div style={{ marginTop: 30, marginBottom: 10 }}>
           <p style={{ opacity: 0.5, display: "inline" }}>Esqueceu sua senha?</p>
 
           <Button onClick={openShowModal}>Clique Aqui</Button>
