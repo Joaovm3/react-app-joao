@@ -69,12 +69,17 @@ export default function Login() {
 
     const handleSuccessMessage = () => {
       dispatch(AwaitForgotPassword());
-      return setOpen(!open);
+      setOpen(!open);
+    };
+
+    const handleModalClose = () => {
+      setShowModal(false);
+      setValidEmail(false);
     };
 
     return (
       <Modal
-        onClose={() => setShowModal(false)}
+        onClose={handleModalClose}
         disabled={!validEmail}
         title="Esqueci minha senha"
         content={`Para redefinir sua senha, informe o usuário ou e-mail cadastrado na sua conta e lhe enviaremos um link com as intruções.`}
@@ -138,7 +143,7 @@ export default function Login() {
     } else {
       setDisable(!formik.isValid || !formik.dirty);
     }
-  }, [formik.isValid])
+  }, [formik.isValid]);
 
   return (
     <BodyStyle>
@@ -147,11 +152,11 @@ export default function Login() {
         <Typography variant="h4">
           <LoginStyle> LOGIN </LoginStyle>
         </Typography>
-
         <Formik initialValues={formik.initialValues}>
           {(props) => (
             <Form onSubmit={formik.handleSubmit}>
               <div style={{ margin: "20px" }}>
+                
                 <InputWithIcon
                   error={formik.errors.user ? true : false}
                   name="user"
@@ -221,11 +226,11 @@ export default function Login() {
 
         {showModal ? handleShowModal() : null}
 
-        {open && (
+        {open && 
           <Snackbar severity="success" onClose={() => setOpen(false)}>
             Email enviado com sucesso!
           </Snackbar>
-        )}
+        }
       </ContainerStyle>
     </BodyStyle>
   );
