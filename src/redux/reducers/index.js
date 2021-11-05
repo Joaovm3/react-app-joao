@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'; 
-import loading from './AppReducers';
-import login from './LoginReducers';
+import { LoadingReducer } from './AppReducers';
+import { LoginReducer } from './LoginReducers';
 
 const reducers = combineReducers({
-    loading,
-    login
+    loading: LoadingReducer,
+    login: LoginReducer
 });
 
 export default reducers;

@@ -13,8 +13,8 @@ export const BodyStyle = styled.div`
   padding: 0;
   height: 100vh;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   text-align: center;
 `;
 

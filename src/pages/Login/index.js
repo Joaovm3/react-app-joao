@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { Formik, useFormik, Form } from "formik";
-
-import { BodyStyle, ContainerStyle, ButtonStyle, LoginStyle } from "./style";
+import * as Yup from "yup";
 
 import { Person, Visibility, VisibilityOff, Lock } from "@material-ui/icons";
 
@@ -13,7 +12,7 @@ import {
   FormHelperText,
 } from "@mui/material";
 
-import * as Yup from "yup";
+import { BodyStyle, ContainerStyle, ButtonStyle, LoginStyle } from "./style";
 
 import Logo from "../../components/Logo";
 import CheckBoxWithLabel from "../../components/CheckBoxWithLabel";
@@ -22,12 +21,29 @@ import Modal from "../../components/Modal";
 import Input from "../../components/Input";
 import Snackbar from "../../components/Snackbar";
 
+import { useDispatch, useSelector } from "react-redux";
+import { HideLoading, ShowLoading } from "../../redux/actions/AppActions";
+import {
+  AwaitForgotPassword,
+  SaveLogin,
+  SaveChecked,
+} from "../../redux/actions/LoginActions";
+
 export default function Login() {
+  const dispatch = useDispatch();
+
+  const { user, userSaved, showForgotPass } = useSelector(
+    (state) => state.login
+  );
+
+  const [disable, setDisable] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [validEmail, setValidEmail] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [open, setOpen] = useState(false);
+
+  const handleCheckBox = () => dispatch(SaveChecked(!userSaved));
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
@@ -51,17 +67,24 @@ export default function Login() {
         .catch((err) => setErrorMessage(err.message), setValidEmail(false));
     };
 
-    const handleSuccessMessage = () => setOpen(!open);
-    
+    const handleSuccessMessage = () => {
+      dispatch(AwaitForgotPassword());
+      setOpen(!open);
+    };
+
+    const handleModalClose = () => {
+      setShowModal(false);
+      setValidEmail(false);
+    };
+
     return (
       <Modal
-        onClose={() => setShowModal(false)}
+        onClose={handleModalClose}
         disabled={!validEmail}
         title="Esqueci minha senha"
         content={`Para redefinir sua senha, informe o usuário ou e-mail cadastrado na sua conta e lhe enviaremos um link com as intruções.`}
         onSubmit={handleSuccessMessage}
       >
-
         <Input
           label="Email ou usuário"
           error={!validEmail}
@@ -93,32 +116,49 @@ export default function Login() {
 
   const formik = useFormik({
     initialValues: {
-      user: "",
-      password: "",
+      user: userSaved ? user.username : "",
+      password: userSaved ? user.password : "",
     },
     onSubmit: (values) => {
-      /* setTimeout(() => {
+      const { user, password } = values;
+
+      dispatch(ShowLoading());
+      setTimeout(() => {
+        dispatch(
+          SaveLogin({
+            username: user,
+            password: password,
+          })
+        );
         
+        dispatch(HideLoading());
+        location.href = "/home";
       }, 3000);
-      */
-      alert(JSON.stringify(values, null, 2));
+      
     },
     validationSchema: validationSchema,
   });
+
+  useEffect(() => {
+    if (userSaved && formik.isValid) {
+      setDisable(false);
+    } else {
+      setDisable(!formik.isValid || !formik.dirty);
+    }
+  }, [formik.isValid]);
 
   return (
     <BodyStyle>
       <ContainerStyle>
         <Logo />
-
         <Typography variant="h4">
           <LoginStyle> LOGIN </LoginStyle>
         </Typography>
-
         <Formik initialValues={formik.initialValues}>
           {(props) => (
             <Form onSubmit={formik.handleSubmit}>
               <div style={{ margin: "20px" }}>
+
                 <InputWithIcon
                   error={formik.errors.user ? true : false}
                   name="user"
@@ -160,10 +200,14 @@ export default function Login() {
                     {formik.errors.password && formik.errors.password}
                   </FormHelperText>
                 </div>
-                <CheckBoxWithLabel />
+
+                <CheckBoxWithLabel
+                  onClick={handleCheckBox}
+                  checked={userSaved}
+                />
 
                 <ButtonStyle
-                  disabled={!formik.isValid || !formik.dirty}
+                  disabled={disable}
                   type="submit"
                   variant="contained"
                   color="primary"
@@ -175,15 +219,20 @@ export default function Login() {
             </Form>
           )}
         </Formik>
-        <div style={{ marginTop: 30 }}>
-          <p style={{ opacity: 0.5 }}>
-            Esqueceu sua senha?
-            <Button onClick={openShowModal}>Clique Aqui</Button>
-          </p>
+
+        <div style={{ marginTop: 30, marginBottom: 10 }}>
+          <p style={{ opacity: 0.5, display: "inline" }}>Esqueceu sua senha?</p>
+
+          <Button onClick={openShowModal}>Clique Aqui</Button>
         </div>
 
         {showModal ? handleShowModal() : null}
-        {open && <Snackbar severity="success" onClose={() => setOpen(false)}> Email enviado com sucesso! </Snackbar>}
+
+        {open && 
+          <Snackbar severity="success" onClose={() => setOpen(false)}>
+            Email enviado com sucesso!
+          </Snackbar>
+        }
       </ContainerStyle>
     </BodyStyle>
   );

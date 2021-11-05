@@ -1,11 +1,16 @@
+import { useSelector } from "react-redux";
 
-
-import { CircularProgress, Box } from '@mui/material';
+import { CircularProgressStyle, BoxStyle } from "./style";
 
 export default function Loading() {
+  const { showLoading } = useSelector((state) => state.loading);
+
+  if (showLoading) {
     return (
-        <Box sx={{ display: 'flex' }}>
-            <CircularProgress />
-        </Box>
-    )
+      <BoxStyle>
+        <CircularProgressStyle />
+      </BoxStyle>
+    );
+  } 
+  return null;
 }
